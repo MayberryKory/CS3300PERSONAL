@@ -4,14 +4,14 @@
 {% block content %}
 
 <h1>Portfolio Name: {{ portfolio.title}}</h1>
-
+<a class="btn btn-primary" href="{% url 'update_portfolio' portfolio.id %}" role="button">Update</a>
 
 <p><strong>Contact Email:</strong> {{ portfolio.contact_email }}</p>
 <p><strong>Is Active:</strong> {{ portfolio.is_active }}</p>
 <p><strong>About:</strong> {{ portfolio.about }}</p>
 
 <p><strong>Projects:</strong></p>
-<a class="btn btn-primary" href="{% url 'create_project' portfolio.id %}" role="button">New</a>
+<a class="btn btn-primary" href="{% url 'create_project' portfolio.id  %}" role="button">New</a>
 
 
 {% if projects %}
@@ -20,6 +20,8 @@
         <li>
         {{project.title}}:
         <a class="btn btn-primary" href="{{ project.get_absolute_url }}" role="button">View</a>
+        <a class="btn btn-primary" href="{% url 'update_project' portfolio.id project.id %}" role="button">Update</a>
+        <a class="btn btn-danger" href="{% url 'delete_project' portfolio.id project.id%}" role="button">Delete</a>
         </li>
       {% endfor %}
     </ul>

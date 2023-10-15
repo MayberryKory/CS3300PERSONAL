@@ -1,9 +1,9 @@
 from django.views import generic
 from django.views import generic
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.http import HttpResponse
 from .models import Student, Portfolio, Project
-from .forms import ProjectForm
+from .forms import ProjectForm, PortfolioForm
 
 
 
@@ -59,4 +59,51 @@ def createProject(request, portfolio_id):
             return redirect('portfolio-detail', portfolio_id)
 
     context = {'form': form}
+    return render(request, 'portfolio_app/project_form.html', context)
+
+
+def deleteProject(request, portfolio_id, project_id):
+    
+    project = Project.objects.get(pk=project_id)
+
+    if request.method == 'POST':
+        # Delete the project
+        project.delete()
+        return redirect('portfolio-detail', portfolio_id)
+
+    return render(request, 'portfolio_app/project_delete.html', {'project': project})
+
+
+def updateProject(request, portfolio_id, project_id):
+    
+    portfolio = get_object_or_404(Portfolio, pk=portfolio_id)
+    
+    project = Project.objects.get(pk=project_id, portfolio=portfolio)
+    form = ProjectForm(request.POST or None ,instance=project)
+    
+    
+    
+    if request.method == 'POST' and form.is_valid():
+        project = form.save()
+        project.portfolio = portfolio
+        project.save()
+        return redirect('portfolio-detail', portfolio_id)
+
+    context = {'project': project ,'form': form, }
+    return render(request, 'portfolio_app/project_form.html', context)
+
+
+
+def updatePortfolio(request, portfolio_id):
+    portfolio = get_object_or_404(Portfolio, pk=portfolio_id)
+    
+    form = PortfolioForm(request.POST or None, instance=portfolio)
+    
+    if request.method == 'POST' and form.is_valid():
+        portfolio = form.save()
+        
+        portfolio.save()
+        return redirect('portfolio-detail', portfolio_id)
+
+    context = {'form': form, 'portfolio':portfolio}
     return render(request, 'portfolio_app/project_form.html', context)
