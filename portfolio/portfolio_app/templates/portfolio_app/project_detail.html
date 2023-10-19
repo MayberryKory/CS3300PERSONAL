@@ -8,6 +8,6 @@
 
 <p><strong>Description:</strong> {{ project.description }}</p>
 <p><strong>Portfolio:</strong><a href="{{ project.portfolio.get_absolute_url }}">{{ project.portfolio.title }} </a>
-
+<a href="{{ project.portfolio.get_absolute_url }}" class="btn btn-primary">Go Back to Portfolio</a>
 
 {% endblock %}

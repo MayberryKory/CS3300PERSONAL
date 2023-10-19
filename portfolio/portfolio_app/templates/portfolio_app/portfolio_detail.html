@@ -15,18 +15,21 @@
 
 
 {% if projects %}
-    <ul>
-      {% for project in projects %}
-        <li>
-        {{project.title}}:
-        <a class="btn btn-primary" href="{{ project.get_absolute_url }}" role="button">View</a>
-        <a class="btn btn-primary" href="{% url 'update_project' portfolio.id project.id %}" role="button">Update</a>
-        <a class="btn btn-danger" href="{% url 'delete_project' portfolio.id project.id%}" role="button">Delete</a>
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>There are no projects registered.</p>
-  {% endif %}
+  <div class="card-deck">
+    {% for project in projects %}
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">{{ project.title }}</h5>
+          <p class="card-text">{{ project.description }}</p>
+          <a href="{{ project.get_absolute_url }}" class="btn btn-primary">View</a>
+          <a href="{% url 'update_project' portfolio.id project.id %}" class="btn btn-secondary">Update</a>
+          <a href="{% url 'delete_project' portfolio.id project.id %}" class="btn btn-danger">Delete</a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>There are no projects registered.</p>
+{% endif %}
 
 {% endblock %}
